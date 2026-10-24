@@ -1,0 +1,11 @@
+{
+  // Site da A Mystica — publicado automaticamente pelo Cloudflare a cada atualização no GitHub
+  "name": "amystica",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./public" },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "amystica.com.br", "custom_domain": true },
+    { "pattern": "www.amystica.com.br", "custom_domain": true }
+  ]
+}
