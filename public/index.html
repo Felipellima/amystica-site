@@ -696,7 +696,7 @@ details.mod .mb{padding:0 20px 20px}
     </div>
 
     <div id="t-ped" hidden>
-      <div class="a-bar"><select id="pedFilter" onchange="renderPedidos()" style="flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:30px;padding:11px 16px"><option value="">Todos os pedidos</option><option value="novo">Novos</option><option value="confirmado">Confirmados</option><option value="enviado">Enviados</option><option value="entregue">Entregues</option><option value="cancelado">Cancelados</option></select><button class="btn" onclick="loadPedidos()">↻</button></div>
+      <div class="a-bar"><select id="pedFilter" onchange="renderPedidos()" style="flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:30px;padding:11px 16px"><option value="ativos" selected>Todos (sem cancelados)</option><option value="novo">Novos</option><option value="confirmado">Confirmados</option><option value="enviado">Enviados</option><option value="entregue">Entregues</option><option value="cancelado">Cancelados</option><option value="">Todos, inclusive cancelados</option></select><button class="btn" onclick="loadPedidos()">↻</button></div>
       <div id="aPeds"></div>
     </div>
 
@@ -1609,7 +1609,7 @@ async function loadPedidos(){$('aPeds').innerHTML='<div class="loading">Carregan
   try{A_PEDS=await DB.pedidos()}catch(e){$('aPeds').innerHTML='<div class="loading">Erro: '+esc(e.message)+'</div>';return}
   const n=A_PEDS.filter(p=>p.status==='novo').length;$('newCount').hidden=!n;$('newCount').textContent=n;renderPedidos()}
 function renderPedidos(){
-  const f=$('pedFilter').value,L=A_PEDS.filter(p=>!f||p.status===f);
+  const f=$('pedFilter').value,L=A_PEDS.filter(p=>!f||(f==='ativos'?p.status!=='cancelado':p.status===f));
   if(!L.length){$('aPeds').innerHTML='<div class="a-card" style="text-align:center"><h3>Nenhum pedido</h3><p class="hint">Os pedidos feitos pelo carrinho aparecem aqui.</p></div>';return}
   $('aPeds').innerHTML=L.map(o=>{const d=new Date(o.created_at),tel=onlyDigits(o.cliente_telefone);return `<div class="od"><div class="h"><div><b>${esc(o.codigo||'—')}</b> <span class="st ${o.status}">${o.status}</span><br><small>${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</small></div><b>${money(o.total||0)}</b></div>
    <div style="margin-top:8px">👤 ${esc(o.cliente_nome)}${o.cliente_telefone?' · 📱 '+esc(o.cliente_telefone):''}<br><small style="color:var(--muted)">📦 ${esc(o.entrega)}${o.endereco?': '+esc(o.endereco):''}${o.pagamento?'<br>💳 '+esc(o.pagamento):''}${o.observacao?'<br>📝 '+esc(o.observacao):''}</small></div>
