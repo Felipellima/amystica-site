@@ -7,3 +7,6 @@ Loja online da A Mystica (amystica.com.br).
 
 Cada atualização enviada para a branch `main` é publicada automaticamente pelo Cloudflare.
 Banco de dados e login: Supabase.
+
+## Como atualizar
+Basta enviar as alterações para a branch `main`; o Cloudflare Workers Builds publica em 1–2 minutos.
