@@ -920,7 +920,7 @@ const DB = ONLINE ? {
   async salvarTextos(o){const rows=Object.entries(o).map(([chave,valor])=>({chave,valor,updated_at:new Date().toISOString()}));if(!rows.length)return;const{error}=await sb.from('textos').upsert(rows);if(error)throw error},
   async apagarTextos(keys){if(!keys.length)return;const{error}=await sb.from('textos').delete().in('chave',keys);if(error)throw error},
   async criarPedido(o){const{error}=await sb.from('pedidos').insert(o);if(error)throw error},
-  evento(tipo,produto,valor){return sb.rpc('registrar_evento',{p_sessao:SID,p_tipo:tipo,p_produto:produto,p_valor:valor})},
+  async evento(tipo,produto,valor){const{error}=await sb.rpc('registrar_evento',{p_sessao:SID,p_tipo:tipo,p_produto:produto,p_valor:valor});if(error)throw error},
   async salvarCarrinho(nome,tel,itens,ok){const{error}=await sb.rpc('salvar_carrinho',{p_sessao:SID,p_nome:nome,p_telefone:tel,p_itens:itens,p_consentimento:ok});if(error)throw error},
   async relatorio(d){const{data,error}=await sb.rpc('relatorio',{p_dias:d});if(error)throw error;return data},
   async carrinhos(){const{data,error}=await sb.from('carrinhos').select('*').order('updated_at',{ascending:false}).limit(200);if(error)throw error;return data},
